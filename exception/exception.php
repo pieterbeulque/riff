@@ -99,10 +99,5 @@ function riffExceptionHandler ($e)
     }
 
     die($output);
-    echo '<pre>';
-    print_r($_SERVER);
 
 }
-
-$test = 0;
-if ($test == 0) throw new Exception("Test equals zero");
