@@ -16,7 +16,7 @@ require_once '../exception/exception.php';
  */
 
 /**
- * The standard exception used by Riff 
+ * The database used by Riff to avoid writing SQL queries
  *
  * @package     Riff
  * @subpackage  RiffDatabase
