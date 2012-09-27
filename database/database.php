@@ -16,7 +16,7 @@ require_once '../exception/exception.php';
  */
 
 /**
- * The standard exception used by Riff 
+ * The database used by Riff to avoid writing SQL queries
  *
  * @package     Riff
  * @subpackage  RiffDatabase
@@ -116,6 +116,49 @@ class RiffDatabase
     }
 
     /**
+     * Executes any given query with any parameters
+     * 
+     * @param string $query
+     * @param array[optional] $parameters   The parameters to replace in the query, key => value
+     */
+    public function execute($query, $parameters = array())
+    {
+        if (!$this->handler) $this->connect();
+
+        $statement = $this->handler->prepare((string) $query);
+
+        // If the statement failed
+        if ($statement === false) throw new RiffException('Something went wrong preparing query "' . $query . '"');
+
+        // Bind parameters
+        foreach ($parameters as $parameter => $value) {
+            $statement->bindValue($parameter, $value, $this->getType($value));
+        }
+
+        if ($statement->execute()) {
+            return $statement;
+        } else {
+            throw new RiffException('Something went wrong executing query "' . $query . '"');
+        }
+    }
+
+    /**
+     * Get the PDO type of a variable (think PARAM_INT for use in limits)
+     * 
+     * @param mixed $value
+     * 
+     * @return int
+     */
+    private function getType($value)
+    {
+        // Type is either string or integer
+        $return = (is_int($value) || is_float($value)) ? PDO::PARAM_INT : PDO::PARAM_STR;
+
+        // Do a last null check
+        return (is_null($value)) ? PDO::PARAM_NULL : $return;
+    }
+
+    /**
      * Allows speed writing of simple SELECT statements without complex JOINS
      * It allows implicit joins (table1, table2)
      * 
@@ -131,9 +174,11 @@ class RiffDatabase
     {
         if (!$this->handler) $this->connect();
 
+        // Start the query and initiate the parameters
         $query = 'SELECT :subject FROM :table';
         $parameters = array('subject' => (string) $subject, 'table' => (string) $table);
 
+        // Include a WHERE clause if needed
         if (count($where) > 0) {
             $query .= ' WHERE ';
 
@@ -145,6 +190,7 @@ class RiffDatabase
 
         }
 
+        // Allows to order the results
         if (strlen($orderBy) > 2) {
             $allowedMethods = array('ASC', 'DESC');
             $orderMethod = strtoupper((string)$orderMethod);
@@ -155,11 +201,14 @@ class RiffDatabase
             $parameters['orderMethod'] = (in_array($orderMethod, $allowedMethods)) ? $orderMethod : 'ASC';
         }
 
+        // Allows to group the results
         if (strlen($groupBy) > 2) {
             $query .= ' GROUP BY :groupBy';
             $parameters['groupBy'] = (string) $groupBy;
         }
 
+
+        // Allows to set a limit on the rows selected
         if (isset($limit)) {
             $query .= ' LIMIT ';
 
@@ -174,10 +223,10 @@ class RiffDatabase
 
         }
 
-        die($query);
+        $statement = $this->execute($query, $parameters);
+
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+
     }
  
 }
-
-$db = new RiffDatabase('testdatabase');
-$db->select('*', 'test_table', array('user.userid' => 5), 1, 'user.name', 'DESC');
