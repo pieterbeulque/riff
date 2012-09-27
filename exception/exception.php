@@ -85,7 +85,7 @@ function riffExceptionHandler ($e)
         $output .= '<ol>';
 
         foreach($traceStack as $trace) {
-            $output .= '<li><strong>' . $trace->getFile() . '</strong> on&nbsp;line&nbsp;<strong>' .$trace->getLine() . '</strong></li>';
+            $output .= '<li>Function <strong>' . $trace['function'] . '</strong> in file <strong>' . $trace['file'] . '</strong> on&nbsp;line&nbsp;<strong>' .$trace['line'] . '</strong></li>';
         }
 
         $output .= '</ol></td></tr>';
