@@ -1,5 +1,6 @@
 <?php
 
+require_once '../riff/riff.php';
 require_once '../exception/exception.php';
 
 /**
@@ -132,7 +133,7 @@ class RiffDatabase
 
         // Bind parameters
         foreach ($parameters as $parameter => $value) {
-            $statement->bindValue($parameter, $value, $this->getType($value));
+            $statement->bindValue(':' . (string) $parameter, $value, $this->getType($value));
         }
 
         if ($statement->execute()) {
@@ -230,3 +231,6 @@ class RiffDatabase
     }
  
 }
+
+$db = new RiffDatabase('riff');
+$result = $db->select('*', 'table1');
