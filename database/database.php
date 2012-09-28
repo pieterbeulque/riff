@@ -109,9 +109,7 @@ class RiffDatabase
                 if ($this->driver == 'mysql') $this->handler->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
             
             } catch (PDOException $e) {
-
                 throw new RiffException('Riff could not connect to the database');
-
             }
         }
     }
@@ -136,10 +134,12 @@ class RiffDatabase
             $statement->bindValue(':' . (string) $parameter, $value, $this->getType($value));
         }
 
-        if ($statement->execute()) {
+        try {
+            $statement->execute();
             return $statement;
-        } else {
-            throw new RiffException('Something went wrong executing query "' . $query . '"');
+        } catch (PDOException $e) {
+            Riff::dump($statement->debugDumpParams());
+            throw new RiffException($e->getMessage());
         }
     }
 
@@ -233,4 +233,4 @@ class RiffDatabase
 }
 
 $db = new RiffDatabase('riff');
-$result = $db->select('*', 'table1');
+$result = $db->select('key', 'table1');
