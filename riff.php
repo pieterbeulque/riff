@@ -53,11 +53,12 @@ class Riff
         // Ofcourse we cannot assume that everything will be named correctly
         $exceptions = array();
         $exceptions['riff'] = 'riff';
-
+        $exceptions['query'] = 'database/query';
+        
         $path = dirname(realpath(__FILE__));
 
         // If the class was not in the exceptions, check if it exists and include it
-        if (!in_array($class, $exceptions)) {
+        if (!isset($exceptions[$class])) {
             $file = $path . '/' . $class . '/' . $class . '.php';
             if (file_exists($file)) require_once $file;
         } else {
@@ -74,12 +75,11 @@ class Riff
      */
     public static function dump($var, $die = false)
     {
-
         // Only dump values if we're in debug mode
         if (!RIFF_DEBUG) return false;
 
         ob_start();
-        echo '<pre style="color: #333; font-family: Menlo, Monaco, Andale Mono, Courier New; font-size: 14px; line-height: 2">';
+        echo '<pre style="background:#eee;border:1px solid #ccc;width:50%;max-width:640px;padding:20px 30px;margin:0 auto;color:#333;font:14px/22px Monaco,monospace">';
         var_dump($var);
         echo '</pre>';
         $dump = ob_get_clean();
