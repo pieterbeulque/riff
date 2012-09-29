@@ -112,38 +112,34 @@ class RiffDatabase
     }
 
     /**
-     * Executes any given query with any parameters
+     * Executes any given query
      * 
-     * @param string $query
-     * @param array[optional] $PDOParameters    The parameters to be replaced by PDO
-     * @param array[optional] $parameters       The parameters to manually sanitised and replaced
+     * @param RiffQuery|string $query
      */
-    public function execute($query, $PDOparameters = array(), $parameters = array())
+    public function execute($query)
     {
         if (!$this->handler) $this->connect();
 
-        // Manually sanitise and replace parameters that cannot be used by PDO
-        // Use as many PDO parameters as possible! This code is a lot more prone to SQL injection!
-        foreach ($parameters as $parameter => $value) {
-            $value = mysql_real_escape_string(stripslashes((string) $value));
-            $query = str_replace(':' . $parameter, $value, $query);
-        }
+        $query = (is_string($query)) ? new RiffQuery($query) : $query;
 
-        $statement = $this->handler->prepare((string) $query);
+        $statement = $this->handler->prepare($query->fetchQuery());
 
         // If the statement failed
         if ($statement === false) throw new RiffException('Something went wrong preparing query "' . $query . '"');
 
         // Bind PDO parameters
-        foreach ($PDOparameters as $parameter => $value) {
-            $statement->bindValue(':' . (string) $parameter, $value, $this->getType($value));
+        $PDOparameters = $query->getPDOparameters();
+
+        if (count($PDOparameters > 0)) {
+            foreach ($PDOparameters as $parameter => $value) {
+                $statement->bindValue(':' . (string) $parameter, $value, $this->getType($value));
+            }   
         }
 
         try {
             $statement->execute();
             return $statement;
         } catch (PDOException $e) {
-            Riff::dump($statement->debugDumpParams());
             throw new RiffException($e->getMessage());
         }
     }
@@ -177,25 +173,32 @@ class RiffDatabase
 
         if (!is_array($values)) throw new RiffException('No values to insert');
 
-        $query = "INSERT INTO :table (";
+
+        $sql = "INSERT INTO :table (";
 
         foreach ($values as $column => $value) {
-            $query .= mysql_real_escape_string(stripslashes($column)) . ',';
+            $sql .= mysql_real_escape_string(stripslashes($column)) . ',';
         }
 
-        $query = rtrim($query, ',');
+        $sql = rtrim($sql, ',');
 
-        $query .= ') VALUES (';
+        $sql .= ') VALUES (';
 
         foreach ($values as $column => $value) {
-            $query .= ':' . $column . ',';
+            $sql .= ':' . $column . ',';
         }
 
-        $query = rtrim($query, ',');
+        $sql = rtrim($sql, ',');
 
-        $query .= ')';
+        $sql .= ')';
 
-        $this->execute($query, $values, array('table' => $table));
+        $query = new RiffQuery($sql, $values, array('table' => $table));
+
+        try {
+            $this->execute($query);
+        } catch (RiffException $e) {
+            throw new RiffException('Could not insert data into ' . $table);
+        }
         
     }
 
@@ -203,73 +206,35 @@ class RiffDatabase
      * Allows speed writing of simple SELECT statements without complex JOINS
      * It allows implicit joins (table1, table2)
      * 
-     * @param string $subject               What to select
-     * @param string $table                 What table to select from
-     * @param array $where                  Where-clause in a key => value way
-     * @param int|array[optional] $limit    If int, just the limit. If array, [0] is start, [1] is count
-     * @param array[optional] $order        Allows to specify the column to order by [0] and the order method [1]
-     * @param string[optional] $orderMethod ASC or DESC
-     * @param string[optional] $groupBy     Allows to specify the column to group by            
+     * @param string $subject                   What to select
+     * @param string $table                     What table to select from
+     * @param string|array[optional] $where     Where-clause in a key => value way
+     * @param int|array[optional] $limit        If int, just the limit. If array, [0] is start, [1] is count
+     * @param string|array[optional] $orderBy   Allows to specify the column to order by [0] and the order method [1]
+     * @param string[optional] $groupBy         Allows to specify the column to group by            
      */
-    public function select($subject, $table, $where = array(), $limit = null, $order = array(), $groupBy = '')
+    public function select($subject, $table, $where = null, $limit = null, $orderBy = null, $groupBy = null)
     {
         if (!$this->handler) $this->connect();
 
         // Start the query
-        $query = 'SELECT :subject FROM :table';
-
-        // Initiate parameters and PDO parameters
-        // Non-PDO params HAVE TO be sanitized!
-        $parameters = array('subject' => (string) $subject, 'table' => (string) $table);
-        $PDOparameters = array();
+        $query = new RiffQuery('SELECT :subject FROM :table');
+        $query->addParameters(array('subject' => (string) $subject, 'table' => (string) $table));
 
         // Include a WHERE clause if needed
-        if (count($where) > 0) {
-            $query .= ' WHERE ';
-
-            foreach ($where as $key => $value) {
-                $query .= (string) mysql_real_escape_string(stripslashes($key)) . ' = :' . (string) $key . ',';
-            }
-
-            $PDOparameters[$key] = (string) $value;
-
-            $query = rtrim($query, ',');
-
-        }
+        // if (isset($where)) $query->addWhere($where);
+        if (isset($where)) $query->addWhere($where);
 
         // Allows to order the results
-        if (count($order) > 0) {
-            $query .= ' ORDER BY :orderBy :orderMethod';
-
-            $allowedMethods = array('ASC', 'DESC');
-            $parameters['orderMethod'] = (isset($order[1]) && in_array($order[1], $allowedMethods)) ? $order[1] : 'ASC';
-
-            $parameters['orderBy'] = $order[0];
-        }
+        if (isset($orderBy)) $query->addOrderBy($orderBy);
 
         // Allows to group the results
-        if (strlen($groupBy) > 2) {
-            $query .= ' GROUP BY :groupBy';
-            $parameters['groupBy'] = (string) $groupBy;
-        }
-
+        if (is_string($groupBy)) $query->addGroupBy($groupBy);
 
         // Allows to set a limit on the rows selected
-        if (isset($limit)) {
-            $query .= ' LIMIT ';
+        if (isset($limit)) $query->addLimit($limit);
 
-            if (is_int($limit)) {
-                $query .= ':limit';
-                $PDOparameters['limit'] = (int) $limit;
-            } else if (is_array($limit)) {
-                $query .= ':limitStart, :limitCount';
-                $PDOparameters['limitStart'] = (int) $limit[0];
-                $PDOparameters['limitCount'] = (int) $limit[1];
-            }
-
-        }
-
-        $statement = $this->execute($query, $PDOparameters, $parameters);
+        $statement = $this->execute($query);
 
         return $statement->fetchAll(PDO::FETCH_ASSOC);
 
