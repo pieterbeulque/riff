@@ -115,19 +115,27 @@ class RiffDatabase
      * Executes any given query with any parameters
      * 
      * @param string $query
-     * @param array[optional] $parameters   The parameters to replace in the query, key => value
+     * @param array[optional] $PDOParameters    The parameters to be replaced by PDO
+     * @param array[optional] $parameters       The parameters to manually sanitised and replaced
      */
-    public function execute($query, $parameters = array())
+    public function execute($query, $PDOparameters = array(), $parameters = array())
     {
         if (!$this->handler) $this->connect();
+
+        // Manually sanitise and replace parameters that cannot be used by PDO
+        // Use as many PDO parameters as possible! This code is a lot more prone to SQL injection!
+        foreach ($parameters as $parameter => $value) {
+            $value = mysql_real_escape_string(stripslashes((string) $value));
+            $query = str_replace(':' . $parameter, $value, $query);
+        }
 
         $statement = $this->handler->prepare((string) $query);
 
         // If the statement failed
         if ($statement === false) throw new RiffException('Something went wrong preparing query "' . $query . '"');
 
-        // Bind parameters
-        foreach ($parameters as $parameter => $value) {
+        // Bind PDO parameters
+        foreach ($PDOparameters as $parameter => $value) {
             $statement->bindValue(':' . (string) $parameter, $value, $this->getType($value));
         }
 
@@ -172,9 +180,13 @@ class RiffDatabase
     {
         if (!$this->handler) $this->connect();
 
-        // Start the query and initiate the parameters
+        // Start the query
         $query = 'SELECT :subject FROM :table';
+
+        // Initiate parameters and PDO parameters
+        // Non-PDO params HAVE TO be sanitized!
         $parameters = array('subject' => (string) $subject, 'table' => (string) $table);
+        $PDOparameters = array();
 
         // Include a WHERE clause if needed
         if (count($where) > 0) {
@@ -195,14 +207,14 @@ class RiffDatabase
 
             $query .= ' ORDER BY :orderBy :orderMethod';
 
-            $parameters['orderBy'] = $orderBy;
+            $PDOparameters['orderBy'] = $orderBy;
             $parameters['orderMethod'] = (in_array($orderMethod, $allowedMethods)) ? $orderMethod : 'ASC';
         }
 
         // Allows to group the results
         if (strlen($groupBy) > 2) {
             $query .= ' GROUP BY :groupBy';
-            $parameters['groupBy'] = (string) $groupBy;
+            $PDOparameters['groupBy'] = (string) $groupBy;
         }
 
 
@@ -212,16 +224,16 @@ class RiffDatabase
 
             if (is_int($limit)) {
                 $query .= ':limit';
-                $parameters['limit'] = (int) $limit;
+                $PDOparameters['limit'] = (int) $limit;
             } else if (is_array($limit)) {
                 $query .= ':limitStart, :limitCount';
-                $parameters['limitStart'] = $limit[0];
-                $parameters['limitCount'] = $limit[1];
+                $PDOparameters['limitStart'] = (int) $limit[0];
+                $PDOparameters['limitCount'] = (int) $limit[1];
             }
 
         }
 
-        $statement = $this->execute($query, $parameters);
+        $statement = $this->execute($query, $PDOparameters, $parameters);
 
         return $statement->fetchAll(PDO::FETCH_ASSOC);
 
