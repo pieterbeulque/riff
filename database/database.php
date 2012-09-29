@@ -111,6 +111,19 @@ class RiffDatabase
         }
     }
 
+    public function delete($table, $where)
+    {
+        $query = new RiffQuery('DELETE FROM :table');
+        $query->addWhere($where);
+        $query->addParameter('table', $table);
+
+        try {
+            $this->execute($query);
+        } catch (RiffException $e) {
+            throw new RiffException('Could not delete from ' . $table);
+        }
+    }
+
     /**
      * Executes any given query
      * 
@@ -237,7 +250,33 @@ class RiffDatabase
         $statement = $this->execute($query);
 
         return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
 
+    /**
+     * Easily update one or more records
+     * 
+     * @param string $table
+     * @param array $values
+     * @param string|array $where
+     */ 
+    public function update($table, $values, $where)
+    {
+        if (!$this->handler) $this->connect();
+
+        $sql = 'UPDATE :table SET ';
+
+        foreach ($values as $column => $value) {
+            $sql .= mysql_real_escape_string(stripslashes($column)) . ' = ' . ':' . $column; 
+        }
+
+        $query = new RiffQuery($sql, $values, array('table' => $table));
+        $query->addWhere($where);
+
+        try {
+            $this->execute($query);
+        } catch (RiffException $e) {
+            throw new RiffException('Could not update ' . $table);
+        }
     }
  
 }
