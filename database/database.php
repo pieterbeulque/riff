@@ -172,11 +172,11 @@ class RiffDatabase
      * @param string $table                 What table to select from
      * @param array $where                  Where-clause in a key => value way
      * @param int|array[optional] $limit    If int, just the limit. If array, [0] is start, [1] is count
-     * @param string[optional] $orderBy     Allows to specify the column to order by
+     * @param array[optional] $order        Allows to specify the column to order by [0] and the order method [1]
      * @param string[optional] $orderMethod ASC or DESC
      * @param string[optional] $groupBy     Allows to specify the column to group by            
      */
-    public function select($subject, $table, $where = array(), $limit = null, $orderBy = '', $orderMethod = 'ASC', $groupBy = '')
+    public function select($subject, $table, $where = array(), $limit = null, $order = array(), $groupBy = '')
     {
         if (!$this->handler) $this->connect();
 
@@ -193,28 +193,29 @@ class RiffDatabase
             $query .= ' WHERE ';
 
             foreach ($where as $key => $value) {
-                $query .= (string) $key . ' = :' . (string) $key . ',';
+                $query .= (string) mysql_real_escape_string(stripslashes($key)) . ' = :' . (string) $key . ',';
             }
+
+            $PDOparameters[$key] = (string) $value;
 
             $query = rtrim($query, ',');
 
         }
 
         // Allows to order the results
-        if (strlen($orderBy) > 2) {
-            $allowedMethods = array('ASC', 'DESC');
-            $orderMethod = strtoupper((string)$orderMethod);
-
+        if (count($order) > 0) {
             $query .= ' ORDER BY :orderBy :orderMethod';
 
-            $PDOparameters['orderBy'] = $orderBy;
-            $parameters['orderMethod'] = (in_array($orderMethod, $allowedMethods)) ? $orderMethod : 'ASC';
+            $allowedMethods = array('ASC', 'DESC');
+            $parameters['orderMethod'] = (isset($order[1]) && in_array($order[1], $allowedMethods)) ? $order[1] : 'ASC';
+
+            $parameters['orderBy'] = $order[0];
         }
 
         // Allows to group the results
         if (strlen($groupBy) > 2) {
             $query .= ' GROUP BY :groupBy';
-            $PDOparameters['groupBy'] = (string) $groupBy;
+            $parameters['groupBy'] = (string) $groupBy;
         }
 
 
