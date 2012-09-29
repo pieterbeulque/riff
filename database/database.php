@@ -1,8 +1,5 @@
 <?php
 
-require_once '../riff/riff.php';
-require_once '../exception/exception.php';
-
 /**
  * Riff PHP Library
  *
@@ -231,6 +228,3 @@ class RiffDatabase
     }
  
 }
-
-$db = new RiffDatabase('riff');
-$result = $db->select('key', 'table1');
