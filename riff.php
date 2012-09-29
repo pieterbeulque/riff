@@ -75,8 +75,11 @@ class Riff
     public static function dump($var, $die = false)
     {
 
+        // Only dump values if we're in debug mode
+        if (!RIFF_DEBUG) return false;
+
         ob_start();
-        echo '<pre style="font-family: ">';
+        echo '<pre style="color: #333; font-family: Menlo, Monaco, Andale Mono, Courier New; font-size: 14px; line-height: 2">';
         var_dump($var);
         echo '</pre>';
         $dump = ob_get_clean();
