@@ -164,6 +164,41 @@ class RiffDatabase
         return (is_null($value)) ? PDO::PARAM_NULL : $return;
     }
 
+    
+    /**
+     * Easily insert an entry into a table
+     * 
+     * @param string $table
+     * @param array $values     Key value pairs
+     */ 
+    public function insert($table, $values)
+    {
+        if (!$this->handler) $this->connect();
+
+        if (!is_array($values)) throw new RiffException('No values to insert');
+
+        $query = "INSERT INTO :table (";
+
+        foreach ($values as $column => $value) {
+            $query .= mysql_real_escape_string(stripslashes($column)) . ',';
+        }
+
+        $query = rtrim($query, ',');
+
+        $query .= ') VALUES (';
+
+        foreach ($values as $column => $value) {
+            $query .= ':' . $column . ',';
+        }
+
+        $query = rtrim($query, ',');
+
+        $query .= ')';
+
+        $this->execute($query, $values, array('table' => $table));
+        
+    }
+
     /**
      * Allows speed writing of simple SELECT statements without complex JOINS
      * It allows implicit joins (table1, table2)
