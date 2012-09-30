@@ -111,6 +111,13 @@ class RiffDatabase
         }
     }
 
+    /**
+     * Delete one or more rows from a table
+     * 
+     * @param string $table
+     * @param string|array $where
+     * @return int                  The affected rows
+     */ 
     public function delete($table, $where)
     {
         $query = new RiffQuery('DELETE FROM :table');
@@ -118,7 +125,7 @@ class RiffDatabase
         $query->addParameter('table', $table);
 
         try {
-            $this->execute($query);
+            return $this->execute($query)->rowCount();
         } catch (RiffException $e) {
             throw new RiffException('Could not delete from ' . $table);
         }
@@ -128,6 +135,7 @@ class RiffDatabase
      * Executes any given query
      * 
      * @param RiffQuery|string $query
+     * @return PDOStatement
      */
     public function execute($query)
     {
@@ -161,7 +169,6 @@ class RiffDatabase
      * Get the PDO type of a variable (think PARAM_INT for use in limits)
      * 
      * @param mixed $value
-     * 
      * @return int
      */
     private function getType($value)
@@ -179,6 +186,7 @@ class RiffDatabase
      * 
      * @param string $table
      * @param array $values     Key value pairs
+     * @return int              The affected rows
      */ 
     public function insert($table, $values)
     {
@@ -208,7 +216,7 @@ class RiffDatabase
         $query = new RiffQuery($sql, $values, array('table' => $table));
 
         try {
-            $this->execute($query);
+            return $this->execute($query)->rowCount();
         } catch (RiffException $e) {
             throw new RiffException('Could not insert data into ' . $table);
         }
@@ -224,7 +232,8 @@ class RiffDatabase
      * @param string|array[optional] $where     Where-clause in a key => value way
      * @param int|array[optional] $limit        If int, just the limit. If array, [0] is start, [1] is count
      * @param string|array[optional] $orderBy   Allows to specify the column to order by [0] and the order method [1]
-     * @param string[optional] $groupBy         Allows to specify the column to group by            
+     * @param string[optional] $groupBy         Allows to specify the column to group by 
+     * @return array           
      */
     public function select($subject, $table, $where = null, $limit = null, $orderBy = null, $groupBy = null)
     {
@@ -258,6 +267,7 @@ class RiffDatabase
      * @param string $table
      * @param array $values
      * @param string|array $where
+     * @return int
      */ 
     public function update($table, $values, $where)
     {
@@ -273,7 +283,7 @@ class RiffDatabase
         $query->addWhere($where);
 
         try {
-            $this->execute($query);
+            return $this->execute($query)->rowCount();
         } catch (RiffException $e) {
             throw new RiffException('Could not update ' . $table);
         }
