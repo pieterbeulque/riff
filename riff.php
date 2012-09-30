@@ -48,9 +48,9 @@ class Riff
         // can be found in exception/exception.php
 
         // We can erase the 'riff' part of the class
-        $class = ltrim(strtolower($class), 'riff');
+        $class = str_replace('riff', '', strtolower($class));
 
-        // Ofcourse we cannot assume that everything will be named correctly
+        // Ofcourse we cannot assume that everything will be named conveniently
         $exceptions = array();
         $exceptions['riff'] = 'riff';
         $exceptions['query'] = 'database/query';
