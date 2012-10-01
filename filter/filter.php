@@ -55,7 +55,7 @@ class RiffFilter
     public static function isUrl($string)
     {
         // Strip off protocol
-        $string = str_replace(array('http://', 'https://', '', $string);
+        $string = str_replace(array('http://', 'https://'), '', $string);
 
         return filter_var($string, FILTER_VALIDATE_URL);
 
