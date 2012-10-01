@@ -233,7 +233,7 @@ class RiffQuery
         // Manually sanitise and replace parameters that cannot be used by PDO
         // Use as many PDO parameters as possible!
         foreach ($this->parameters as $parameter => $value) {
-            $value = RiffFilter::sanitize((string) $value));
+            $value = RiffFilter::sanitize((string) $value);
             $fetchedQuery = str_replace(':' . $parameter, $value, $fetchedQuery);
         }
 
