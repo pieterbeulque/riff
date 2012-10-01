@@ -258,7 +258,19 @@ class RiffDatabase
 
         $statement = $this->execute($query);
 
-        return $statement->fetchAll(PDO::FETCH_ASSOC);
+        $result = array();
+        $temp = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        // If an ID was selected, we'll put this as the key instead of numeric
+        if (isset($temp[0]['id'])) {
+            foreach ($temp as $row) {
+                $result[$row['id']] = $row;
+            }
+        } else {
+            $result = $temp;
+        }
+
+        return $result;
     }
 
     /**
