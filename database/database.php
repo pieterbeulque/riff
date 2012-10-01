@@ -174,7 +174,7 @@ class RiffDatabase
     private function getType($value)
     {
         // Type is either string or integer
-        $return = (is_int($value) || is_float($value)) ? PDO::PARAM_INT : PDO::PARAM_STR;
+        $return = (is_int($value)) ? PDO::PARAM_INT : PDO::PARAM_STR;
 
         // Do a last null check
         return (is_null($value)) ? PDO::PARAM_NULL : $return;
@@ -198,7 +198,7 @@ class RiffDatabase
         $sql = "INSERT INTO :table (";
 
         foreach ($values as $column => $value) {
-            $sql .= mysql_real_escape_string(stripslashes($column)) . ',';
+            $sql .= RiffFilter::sanitize($column) . ',';
         }
 
         $sql = rtrim($sql, ',');
@@ -276,7 +276,7 @@ class RiffDatabase
         $sql = 'UPDATE :table SET ';
 
         foreach ($values as $column => $value) {
-            $sql .= mysql_real_escape_string(stripslashes($column)) . ' = ' . ':' . $column; 
+            $sql .= RiffFilter::sanitize((string) $column) . ' = ' . ':' . $column; 
         }
 
         $query = new RiffQuery($sql, $values, array('table' => $table));

@@ -208,13 +208,13 @@ class RiffQuery
             $this->where = 'WHERE ';
 
             foreach ($where as $key => $value) {
-                $this->where .= (string) mysql_real_escape_string(stripslashes($key)) . ' = :' . (string) $key . ',';
+                $this->where .= RiffFilter::sanitize((string) $key) . ' = :' . (string) $key . ',';
             }
 
             $this->addPDOParameters($where);
             $this->where = rtrim($this->where, ','); 
         } else if (is_string($where)) {
-            $this->where = mysql_real_escape_string(stripslashes($where));
+            $this->where = RiffFilter::sanitize($where);
         } else {
             throw new RiffException('WHERE-clause is not valid');
         }
@@ -233,7 +233,7 @@ class RiffQuery
         // Manually sanitise and replace parameters that cannot be used by PDO
         // Use as many PDO parameters as possible!
         foreach ($this->parameters as $parameter => $value) {
-            $value = mysql_real_escape_string(stripslashes((string) $value));
+            $value = RiffFilter::sanitize((string) $value));
             $fetchedQuery = str_replace(':' . $parameter, $value, $fetchedQuery);
         }
 
