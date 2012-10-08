@@ -35,6 +35,27 @@ class RiffFilter
         
     }
 
+    public function urlise($string)
+    {
+
+        $string = mb_strtolower($string, 'UTF-8');
+
+        $accentedVowels = array('é', 'è', 'ë', 'á', 'à', 'ä', 'ú', 'ù', 'ü', 'í', 'ì', 'ï', 'ó', 'ò', 'ö');
+        $plainVowels    = array('e', 'e', 'e', 'a', 'a', 'a', 'u', 'u', 'u', 'i', 'i', 'i', 'o', 'o', 'o');
+
+        $string = str_replace('"', ' ', $string);
+        $string = str_replace(' ', '-', $string);
+
+        if (urldecode($string) == $string) {
+            $string = urlencode($string);
+        }
+
+        // convert "--" to "-"
+        $string = preg_replace('/\-+/', '-', $string);
+
+        return trim($string, '-');
+    }
+
     /**
      * Is valid email?
      * 
@@ -58,7 +79,6 @@ class RiffFilter
         $string = str_replace(array('http://', 'https://'), '', $string);
 
         return filter_var($string, FILTER_VALIDATE_URL);
-
     }
 
     /**
