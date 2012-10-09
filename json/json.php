@@ -51,7 +51,6 @@ class RiffJSON
      * Call the URL and return the decoded information
      * 
      * @var string $url     The API URL
-     * @var bool $inArray   Array or object returned?
      */ 
     public function __construct($url, $inArray = false)
     {
@@ -61,7 +60,16 @@ class RiffJSON
         if (!$this->rawJSON) {
             throw new RiffException('Cannot connect to API');
         }
+    }
 
+    /**
+     * Get decoded JSON in array or object
+     * 
+     * @var bool $inArray   Array or object returned?
+     * @return object|array
+     */ 
+    public function getDecoded($inArray = false)
+    {
         $this->decodedJSON = json_decode($this->rawJSON, (bool) $inArray);
 
         return $this->decodedJSON;
