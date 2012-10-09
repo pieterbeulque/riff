@@ -24,36 +24,12 @@
  *
  */
 
-/**
-* 
-*/
 class RiffFilter
 {
     
     public function __construct()
     {
         
-    }
-
-    public function urlise($string)
-    {
-
-        $string = mb_strtolower($string, 'UTF-8');
-
-        $accentedVowels = array('é', 'è', 'ë', 'á', 'à', 'ä', 'ú', 'ù', 'ü', 'í', 'ì', 'ï', 'ó', 'ò', 'ö');
-        $plainVowels    = array('e', 'e', 'e', 'a', 'a', 'a', 'u', 'u', 'u', 'i', 'i', 'i', 'o', 'o', 'o');
-
-        $string = str_replace('"', ' ', $string);
-        $string = str_replace(' ', '-', $string);
-
-        if (urldecode($string) == $string) {
-            $string = urlencode($string);
-        }
-
-        // convert "--" to "-"
-        $string = preg_replace('/\-+/', '-', $string);
-
-        return trim($string, '-');
     }
 
     /**
@@ -91,5 +67,36 @@ class RiffFilter
     {
         return htmlspecialchars(stripslashes((string) $string));
     }
+
+    /**
+     * Cleans a string for the URL, removes weird signs and letters and returns a URL-friendly string
+     * 
+     * @param string $string
+     * @return string
+     */ 
+    public static function urlise($string)
+    {
+        $string = mb_strtolower($string, 'UTF-8');
+
+        $accentedVowels = array('é','è','ë','á','à','ä','ú','ù','ü','í','ì','ï','ó','ò','ö');
+        $plainVowels    = array('e','e','e','a','a','a','u','u','u','i','i','i','o','o','o');
+        $string = str_replace($accentedVowels, $plainVowels, $string);
+
+        $reservedCharacters = array('/','?',':','@','#','[',']','!','$','&','\'','(',')','*','+',',',';','=','"');
+        $string = str_replace($reservedCharacters, ' ', $string);
+
+        $string = str_replace(' ', '-', $string);
+
+        if (urldecode($string) == $string) {
+            $string = urlencode($string);
+        }
+
+        // convert "--" to "-"
+        $string = preg_replace('/\-+/', '-', $string);
+
+        return trim($string, '-');
+    }
+
+
 
 }
