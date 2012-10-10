@@ -206,11 +206,11 @@ class RiffQuery
             $this->where = 'WHERE ';
 
             foreach ($where as $key => $value) {
-                $this->where .= RiffFilter::sanitize((string) $key) . ' = :' . (string) $key . ',';
+                $this->where .= RiffFilter::sanitize((string) $key) . ' = :' . (string) $key . ' AND ';
             }
 
             $this->addPDOParameters($where);
-            $this->where = rtrim($this->where, ','); 
+            $this->where = rtrim($this->where, ' AND '); 
         } else if (is_string($where)) {
             $this->where = RiffFilter::sanitize($where);
         } else {
