@@ -62,7 +62,8 @@ class Riff
             $file = $path . '/' . $class . '/' . $class . '.php';
             if (file_exists($file)) require_once $file;
         } else {
-            require_once $path . '/' . $exceptions[$class] . '.php';
+            $file = $path . '/' . $exceptions[$class] . '.php';
+            if (file_exists($file)) require_once $file;
         }
 
     }
