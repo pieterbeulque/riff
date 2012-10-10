@@ -58,14 +58,11 @@ class Riff
         $path = dirname(realpath(__FILE__));
 
         // If the class was not in the exceptions, check if it exists and include it
-        if (!isset($exceptions[$class])) {
-            $file = $path . '/' . $class . '/' . $class . '.php';
-            if (file_exists($file)) require_once $file;
-        } else {
-            $file = $path . '/' . $exceptions[$class] . '.php';
-            if (file_exists($file)) require_once $file;
-        }
+        $file  = $path . '/';
+        $file .= (!isset($exceptions[$class])) ?  $class . '/' . $class : $exceptions[$class];
+        $file .= '.php';
 
+        if (file_exists($file)) require_once $file;
     }
 
     /**
