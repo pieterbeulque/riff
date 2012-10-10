@@ -184,7 +184,7 @@ class RiffDatabase
      * 
      * @param string $table
      * @param array $values     Key value pairs
-     * @return int              The affected rows
+     * @return int              The new ID
      */ 
     public function insert($table, $values)
     {
@@ -214,7 +214,8 @@ class RiffDatabase
         $query = new RiffQuery($sql, $values, array('table' => $table));
 
         try {
-            return $this->execute($query)->rowCount();
+            $this->execute($query);
+            return $this->handler->lastInsertId();
         } catch (RiffException $e) {
             throw new RiffException('Could not insert data into ' . $table);
         }
