@@ -10,7 +10,6 @@
  *
  * @author      Pieter Beulque <pieterbeulque@gmail.com>
  * @since       0.1.1
- *
  */
 
 /**
@@ -21,7 +20,6 @@
  *
  * @author      Pieter Beulque <pieterbeulque@gmail.com>
  * @since       0.1.1
- *
  */
 
 class RiffQuery
