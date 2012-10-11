@@ -54,7 +54,7 @@ class RiffHTTP
     /**
      * Alias for headers_sent()
      */ 
-    public static function isSent()
+    public static function headersSent()
     {
         return headers_sent();
     }
@@ -79,7 +79,7 @@ class RiffHTTP
      */ 
     public static function setHeaders($headers)
     {
-        if (self::isSent()) throw new Exception("Headers were already sent");
+        if (self::headersSent()) throw new Exception("Headers were already sent");
 
         foreach ((array) $headers as $header) {
             header((string) $header);
