@@ -95,8 +95,9 @@ class RiffDatabase
             try {
 
                 // Create the DSN
-                $dsn  = $this->driver . ':host=' . $this->host . ';dbname=' . $this->database;
-                $dsn .= ';user=' . $this->username . ';password=' . $this->password;
+                $dsn  = $this->driver . ':host=' . $this->host . ';dbname=' . $this->database
+                        . ';user=' . $this->username . ';password=' . $this->password
+                        . ';charset=utf8';
 
                 // Create the handler and configure it
                 $this->handler = new PDO($dsn, $this->username, $this->password);
@@ -267,6 +268,11 @@ class RiffDatabase
             }
         } else {
             $result = $temp;
+        }
+
+        // If we only have one result, we don't need the deeper array
+        if (count($result) == 1) {
+            $result = end($result);
         }
 
         return $result;

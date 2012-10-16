@@ -10,6 +10,7 @@
  *
  * @author      Pieter Beulque <pieterbeulque@gmail.com>
  * @since       0.1.1
+ *
  */
 
 /**
@@ -20,6 +21,7 @@
  *
  * @author      Pieter Beulque <pieterbeulque@gmail.com>
  * @since       0.1.1
+ *
  */
 
 // Used charset
@@ -30,6 +32,8 @@ if (!defined('RIFF_DEBUG')) define('RIFF_DEBUG', true);
 
 // Add the autoloader handle
 spl_autoload_register(array('Riff', 'autoload'));
+
+require_once WWW_ROOT . 'libs' . DIRECTORY_SEPARATOR . 'riff' . DIRECTORY_SEPARATOR . 'exception' . DIRECTORY_SEPARATOR . 'exception.php';
 
 class Riff
 {
@@ -56,11 +60,13 @@ class Riff
         $path = dirname(realpath(__FILE__));
 
         // If the class was not in the exceptions, check if it exists and include it
-        $file  = $path . '/';
-        $file .= (!isset($exceptions[$class])) ?  $class . '/' . $class : $exceptions[$class];
-        $file .= '.php';
+        if (!isset($exceptions[$class])) {
+            $file = $path . '/' . $class . '/' . $class . '.php';
+            if (file_exists($file)) require_once $file;
+        } else {
+            require_once $path . '/' . $exceptions[$class] . '.php';
+        }
 
-        if (file_exists($file)) require_once $file;
     }
 
     /**
