@@ -26,9 +26,9 @@ class RiffHTTP
 {
     /**
      * Most frequent HTTP response codes
-     * 
+     *
      * @var array
-     */ 
+     */
     private $codes = array(
         200 => 'OK',
         201 => 'Created',
@@ -53,7 +53,7 @@ class RiffHTTP
 
     /**
      * Alias for headers_sent()
-     */ 
+     */
     public static function headersSent()
     {
         return headers_sent();
@@ -61,7 +61,7 @@ class RiffHTTP
 
     /**
      * Do a HTTP redirect
-     * 
+     *
      * @param string $url           The destination
      * @param int[optional] $code   The status code
      */
@@ -70,27 +70,27 @@ class RiffHTTP
         self::setHeadersByCode((int) $code);
         self::setHeaders('Location: ' . (string) $url);
         exit;
-    }  
+    }
 
     /**
      * Set one or multiple headers by full string
-     * 
+     *
      * @param array|string $headers      The headers to send to the browser
-     */ 
+     */
     public static function setHeaders($headers)
     {
         if (self::headersSent()) throw new Exception("Headers were already sent");
 
         foreach ((array) $headers as $header) {
             header((string) $header);
-        } 
+        }
     }
 
     /**
      * Set one or multiple headers by status code
-     * 
+     *
      * @param int $code        The status code to send to the browser
-     */ 
+     */
     public static function setHeadersByCode($code)
     {
         $code = (int) $code;
