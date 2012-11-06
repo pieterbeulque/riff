@@ -69,7 +69,7 @@ class RiffDatabase
 
     /**
      * Creates a connection instance
-     * 
+     *
      * @param string $database  The database you want to connect to
      * @param string $driver    The driver to use. Riff only supports HTML
      * @param string $host      The host or IP of the database server
@@ -86,8 +86,8 @@ class RiffDatabase
     }
 
     /**
-     * Connect to the database if we don't have a handler already 
-     */ 
+     * Connect to the database if we don't have a handler already
+     */
     private function connect()
     {
         if (!$this->handler) {
@@ -103,7 +103,7 @@ class RiffDatabase
                 $this->handler = new PDO($dsn, $this->username, $this->password);
                 $this->handler->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 if ($this->driver == 'mysql') $this->handler->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
-            
+
             } catch (PDOException $e) {
                 throw new RiffException('Riff could not connect to the database');
             }
@@ -112,11 +112,11 @@ class RiffDatabase
 
     /**
      * Delete one or more rows from a table
-     * 
+     *
      * @param string $table
      * @param string|array $where
      * @return int                  The affected rows
-     */ 
+     */
     public function delete($table, $where)
     {
         $query = new RiffQuery('DELETE FROM :table');
@@ -132,7 +132,7 @@ class RiffDatabase
 
     /**
      * Executes any given query
-     * 
+     *
      * @param RiffQuery|string $query
      * @return PDOStatement
      */
@@ -153,7 +153,7 @@ class RiffDatabase
         if (count($PDOparameters > 0)) {
             foreach ($PDOparameters as $parameter => $value) {
                 $statement->bindValue(':' . (string) $parameter, $value, $this->getType($value));
-            }   
+            }
         }
 
         try {
@@ -166,7 +166,7 @@ class RiffDatabase
 
     /**
      * Get the PDO type of a variable (think PARAM_INT for use in limits)
-     * 
+     *
      * @param mixed $value
      * @return int
      */
@@ -179,14 +179,13 @@ class RiffDatabase
         return (is_null($value)) ? PDO::PARAM_NULL : $return;
     }
 
-    
     /**
      * Easily insert an entry into a table
-     * 
+     *
      * @param string $table
      * @param array $values     Key value pairs
      * @return int              The new ID
-     */ 
+     */
     public function insert($table, $values)
     {
         if (!$this->handler) $this->connect();
@@ -220,20 +219,19 @@ class RiffDatabase
         } catch (RiffException $e) {
             throw new RiffException('Could not insert data into ' . $table);
         }
-        
     }
 
     /**
      * Allows speed writing of simple SELECT statements without complex JOINS
      * It allows implicit joins (table1, table2)
-     * 
+     *
      * @param string $subject                   What to select
      * @param string $table                     What table to select from
      * @param string|array[optional] $where     Where-clause in a key => value way
      * @param int|array[optional] $limit        If int, just the limit. If array, [0] is start, [1] is count
      * @param string|array[optional] $orderBy   Allows to specify the column to order by [0] and the order method [1]
      * @param string[optional] $groupBy         Allows to specify the column to group by 
-     * @return array           
+     * @return array
      */
     public function select($subject, $table, $where = null, $limit = null, $orderBy = null, $groupBy = null)
     {
@@ -280,12 +278,12 @@ class RiffDatabase
 
     /**
      * Easily update one or more records
-     * 
+     *
      * @param string $table
      * @param array $values
      * @param string|array $where
      * @return int
-     */ 
+     */
     public function update($table, $values, $where)
     {
         if (!$this->handler) $this->connect();
@@ -305,5 +303,4 @@ class RiffDatabase
             throw new RiffException('Could not update ' . $table);
         }
     }
- 
 }

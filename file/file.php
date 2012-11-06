@@ -26,24 +26,24 @@ class RiffFile
 {
     /**
      * The content
-     * 
+     *
      * @var string
-     */ 
+     */
     private $content;
 
     /**
      * The path to the file
-     * 
+     *
      * @var string
-     */ 
+     */
     private $path;
 
     /**
      * Creates a reference to a file (it doesn't have to exist)
-     * 
+     *
      * @param string $path          The path to the file
      * @param bool[optional] $read  Read the file or not
-     */ 
+     */
     public function __construct($path, $read = true)
     {
         $this->path = (string) $path;
@@ -53,9 +53,9 @@ class RiffFile
 
     /**
      * Change the file mode
-     * 
+     *
      * @param int $mode     The mode e.g. 0755 (octal!)
-     */ 
+     */
     public function chmod($mode)
     {
         @chmod($this->path, (int) $mode);
@@ -63,10 +63,10 @@ class RiffFile
 
     /**
      * Checks if a file exists
-     * 
+     *
      * @param string $path
      * @return bool
-     */ 
+     */
     public static function exists($path)
     {
         return (@file_exists((string) $path) && is_file((string) $path));
@@ -74,9 +74,9 @@ class RiffFile
 
     /**
      * Gets the stored content
-     * 
+     *
      * @return string
-     */ 
+     */
     public function getContent()
     {
         if (!isset($this->content)) $this->read();
@@ -96,10 +96,10 @@ class RiffFile
 
     /**
      * Sets the content of the current file
-     * 
+     *
      * @param string $content           The new content
      * @param bool[optional] $append    Append or overwrite?
-     */ 
+     */
     public function setContent($content, $append = false)
     {
         $flags = ($append) ? FILE_APPEND : 0;

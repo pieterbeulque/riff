@@ -24,18 +24,17 @@
 
 class RiffFilter
 {
-    
     public function __construct()
     {
-        
+
     }
 
     /**
      * Is valid email?
-     * 
+     *
      * @param string $string
      * @return bool
-     */ 
+     */
     public static function isEmail($string)
     {
         return filter_var($string, FILTER_VALIDATE_EMAIL);
@@ -43,10 +42,10 @@ class RiffFilter
 
     /**
      * Is valid URL
-     * 
+     *
      * @param string $string
      * @return bool
-     */ 
+     */
     public static function isUrl($string)
     {
         // Strip off protocol
@@ -57,7 +56,7 @@ class RiffFilter
 
     /**
      * Prepares a string for injection into MySQL queries
-     * 
+     *
      * @param string $string
      * @return string
      */
@@ -68,10 +67,10 @@ class RiffFilter
 
     /**
      * Cleans a string for the URL, removes weird signs and letters and returns a URL-friendly string
-     * 
+     *
      * @param string $string
      * @return string
-     */ 
+     */
     public static function urlise($string)
     {
         $string = mb_strtolower($string, 'UTF-8');
@@ -94,7 +93,4 @@ class RiffFilter
 
         return trim($string, '-');
     }
-
-
-
 }

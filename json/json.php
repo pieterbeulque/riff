@@ -26,31 +26,31 @@ class RiffJSON
 {
     /**
      * The decoded JSON object or array (specify in constructor)
-     * 
+     *
      * @var object|array
-     */ 
+     */
     private $decodedJSON;
 
     /**
      * The raw JSON output from the API
-     * 
+     *
      * @var string
-     */ 
+     */
     private $rawJSON;
 
     /**
      * The API url
-     * 
+     *
      * @var string
-     */ 
+     */
     private $url;
 
     /**
      * Call the URL and return the decoded information
-     * 
+     *
      * @var string $url     The API URL
      * @var bool $validate  Try and parse the JSON in a proper way (e.g. Flickr adds extra chars)
-     */ 
+     */
     public function __construct($url, $validate = false)
     {
         $this->url = (string) $url;
@@ -78,10 +78,10 @@ class RiffJSON
 
     /**
      * Get decoded JSON in array or object
-     * 
+     *
      * @var bool $inArray   Array or object returned?
      * @return object|array
-     */ 
+     */
     public function getDecoded($inArray = true)
     {
         $this->decodedJSON = json_decode($this->rawJSON, (bool) $inArray);
@@ -91,9 +91,9 @@ class RiffJSON
 
     /**
      * Get raw JSON
-     * 
+     *
      * @return object|array
-     */ 
+     */
     public function getRaw()
     {
         return $this->rawJSON;

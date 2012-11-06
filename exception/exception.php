@@ -24,7 +24,6 @@
 
 class RiffException extends Exception
 {
-
     /**
      * Class constructor
      *
@@ -35,7 +34,6 @@ class RiffException extends Exception
     {
         parent::__construct((string) $message, (int) $code);
     }
-
 }
 
 // Set the exception handler
@@ -49,7 +47,6 @@ set_exception_handler('riffExceptionHandler');
  */
 function riffExceptionHandler ($e)
 {
-
     // Do some checks so we won't crash when we use these variables
     if (!isset($_SERVER['SERVER_NAME'])) $_SERVER['SERVER_NAME'] = '';
     if (!isset($_SERVER['REQUEST_METHOD'])) $_SERVER['REQUEST_METHOD'] = '';
@@ -87,7 +84,7 @@ function riffExceptionHandler ($e)
         }
 
         $output .= '</ol></td></tr>';
- 
+
     } else {
 
         $output .= '<p>No trace information</p>';
@@ -121,5 +118,4 @@ function riffExceptionHandler ($e)
     }
 
     die($output);
-
 }
