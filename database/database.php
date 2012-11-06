@@ -24,7 +24,6 @@
 
 class RiffDatabase
 {
-
     /**
      * Database name
      *
@@ -269,7 +268,7 @@ class RiffDatabase
         }
 
         // If we only have one result, we don't need the deeper array
-        if (count($result) == 1) {
+        if (count($result) == 1 && $limit === 1) {
             $result = end($result);
         }
 
