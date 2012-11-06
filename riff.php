@@ -33,11 +33,10 @@ if (!defined('RIFF_DEBUG')) define('RIFF_DEBUG', true);
 // Add the autoloader handle
 spl_autoload_register(array('Riff', 'autoload'));
 
-require_once WWW_ROOT . 'libs' . DIRECTORY_SEPARATOR . 'riff' . DIRECTORY_SEPARATOR . 'exception' . DIRECTORY_SEPARATOR . 'exception.php';
+require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'exception' . DIRECTORY_SEPARATOR . 'exception.php';
 
 class Riff
 {
-
     public function __construct()
     {
 
@@ -56,7 +55,7 @@ class Riff
         $exceptions = array();
         $exceptions['riff'] = 'riff';
         $exceptions['query'] = 'database/query';
-        
+
         $path = dirname(realpath(__FILE__));
 
         // If the class was not in the exceptions, check if it exists and include it
@@ -71,7 +70,7 @@ class Riff
 
     /**
      * A nicer way to dump some variables in a readable way
-     * 
+     *
      * @param mixed $var            Variable to dump
      * @param bool[optional] $die   Quit execution after dumping?
      */
@@ -90,5 +89,4 @@ class Riff
 
         if ($die) die();
     }
-
 }
