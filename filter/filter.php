@@ -30,6 +30,30 @@ class RiffFilter
     }
 
     /**
+     * Converts a camelCased string (searchAll) to a hyphen-separated string (search-all)
+     *
+     * @param string $string
+     * @return string
+     */
+    public static function camelCaseToHyphen($string)
+    {
+        return strtolower(preg_replace('/([A-Z])/', '-$1', $string));
+    }
+
+    /**
+     * Converts a hyphen-separated string (search-all) to a camelCased string (searchAll)
+     *
+     * @param string $string
+     * @param bool $lowercase   if true, lowercase the string first, if false, keep the string as is
+     * @return string
+     */
+    public static function hyphenToCamelCase($string, $lowercase = true)
+    {
+        $string = ($lowercase) ? strtolower($string) : $string;
+        return lcfirst(implode('', array_map('ucfirst', explode('-', $string))));
+    }
+
+    /**
      * Is valid email?
      *
      * @param string $string
