@@ -37,7 +37,7 @@ class RiffFilter
      */
     public static function camelCaseToHyphen($string)
     {
-        return strtolower(preg_replace('/([A-Z])/', '-$1', $string));
+        return trim(strtolower(preg_replace('/([A-Z])/', '-$1', $string)), '-');
     }
 
     /**
