@@ -23,7 +23,7 @@ class RiffFilterTest extends PHPUnit_Framework_TestCase
     public function testDetectsWrongEmail()
     {
         $isEmail = RiffFilter::isEmail('not@nem.ail.');
-        $this->assertEquals(false, $isEmail);
+        $this->assertFalse($isEmail);
     }
 
     public function testDetectsCorrectEmail()
