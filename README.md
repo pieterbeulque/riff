@@ -1,5 +1,7 @@
 # Riff
-A stand-alone PHP library
+A stand-alone PHP library.
+
+Very influenced by the great Spoon Library, I took a lot of ideas from them. It's a great learning experience looking at how these guys did some things.
 
 ## Release Log
 
