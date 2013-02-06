@@ -36,8 +36,8 @@ class Riff
     {
         // Riff has a convenient way of naming classes/files
         // We can assume that a class called Riff\Database\Query
-        // can be found in database/query.php
-        $parts = explode('\\', strtolower($class));
+        // can be found in Database/Query.php
+        $parts = explode('\\', $class);
 
         $filename = end($parts);
         $directory = prev($parts);
