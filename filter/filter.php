@@ -22,7 +22,9 @@
  * @since       0.1.1
  */
 
-class RiffFilter
+namespace Riff\Filter;
+
+class Filter
 {
     public function __construct()
     {

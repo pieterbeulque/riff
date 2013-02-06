@@ -22,7 +22,9 @@
  * @since       0.2.1
  */
 
-class RiffHTTP
+namespace Riff\HTTP;
+
+class HTTP
 {
     /**
      * Most frequent HTTP response codes

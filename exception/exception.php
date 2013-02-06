@@ -13,7 +13,7 @@
  */
 
 /**
- * The standard exception used by Riff 
+ * The standard exception used by Riff
  *
  * @package     Riff
  * @subpackage  RiffException
@@ -22,7 +22,9 @@
  * @since       0.1.1
  */
 
-class RiffException extends Exception
+namespace Riff\Exception;
+
+class Exception extends \Exception
 {
     /**
      * Class constructor
@@ -37,15 +39,15 @@ class RiffException extends Exception
 }
 
 // Set the exception handler
-set_exception_handler('riffExceptionHandler');
+set_exception_handler('Riff\Exception\exceptionHandler');
 
 /**
  * Prints an easy on the eye error log to the web browser,
  * makes it more fun to debug your applications
  *
- * @param RiffException $e
+ * @param Exception $e
  */
-function riffExceptionHandler ($e)
+function exceptionHandler ($e)
 {
     // Do some checks so we won't crash when we use these variables
     if (!isset($_SERVER['SERVER_NAME'])) $_SERVER['SERVER_NAME'] = '';

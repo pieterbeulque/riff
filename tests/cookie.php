@@ -4,6 +4,8 @@ require_once 'PHPUnit/Autoload.php';
 
 require_once '../riff.php';
 
+use Riff\Cookie\Cookie;
+
 class RiffCookieTest extends PHPUnit_Framework_TestCase
 {
     /**
@@ -11,7 +13,7 @@ class RiffCookieTest extends PHPUnit_Framework_TestCase
      */
     public function testExistsFails()
     {
-        $this->assertFalse(RiffCookie::exists('zimbabwe'));
+        $this->assertFalse(Cookie::exists('zimbabwe'));
     }
 
     /**
@@ -19,6 +21,6 @@ class RiffCookieTest extends PHPUnit_Framework_TestCase
      */
     public function testGetNonexistant()
     {
-        $this->assertFalse(RiffCookie::get('zimbabwoooo'));
+        $this->assertFalse(Cookie::get('zimbabwoooo'));
     }
 }

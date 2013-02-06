@@ -22,7 +22,9 @@
  * @since       0.2.1
  */
 
-class RiffFile
+namespace Riff\File;
+
+class File
 {
     /**
      * The content

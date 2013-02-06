@@ -22,7 +22,9 @@
  * @since       0.1.2
  */
 
-class RiffCookie
+namespace Riff\Cookie;
+
+class Cookie
 {
 
     /**

@@ -22,7 +22,9 @@
  * @since       0.1.1
  */
 
-class RiffJSON
+namespace Riff\JSON;
+
+class JSON
 {
     /**
      * The decoded JSON object or array (specify in constructor)

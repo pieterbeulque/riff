@@ -14,7 +14,7 @@
  */
 
 /**
- * The base class for Riff that handles autoloading and generic functions 
+ * The base class for Riff that handles autoloading and generic functions
  *
  * @package     Riff
  * @subpackage  Riff
@@ -45,27 +45,23 @@ class Riff
     public static function autoload($class)
     {
         // Riff has a convenient way of naming classes/files
-        // We can assume that a class called RiffException
-        // can be found in exception/exception.php
+        // We can assume that a class called Riff\Database\Query
+        // can be found in database/query.php
+        $parts = explode('\\', strtolower($class));
 
-        // We can erase the 'riff' part of the class
-        $class = str_replace('riff', '', strtolower($class));
-
-        // Ofcourse we cannot assume that everything will be named conveniently
-        $exceptions = array();
-        $exceptions['riff'] = 'riff';
-        $exceptions['query'] = 'database/query';
+        $filename = end($parts);
+        $directory = prev($parts);
 
         $path = dirname(realpath(__FILE__));
 
-        // If the class was not in the exceptions, check if it exists and include it
-        if (!isset($exceptions[$class])) {
-            $file = $path . '/' . $class . '/' . $class . '.php';
-            if (file_exists($file)) require_once $file;
-        } else {
-            require_once $path . '/' . $exceptions[$class] . '.php';
-        }
+        // Try including the file
+        $filepath = $path . DIRECTORY_SEPARATOR . $directory . DIRECTORY_SEPARATOR . $filename . '.php';
 
+        if (@file_exists($filepath)) {
+            require_once $filepath;
+        } else {
+            throw new MissingException("Cannot load file " . $filepath);
+        }
     }
 
     /**

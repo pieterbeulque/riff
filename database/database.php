@@ -22,7 +22,9 @@
  * @since       0.1.1
  */
 
-class RiffDatabase
+namespace Riff\Database;
+
+class Database
 {
     /**
      * Database name

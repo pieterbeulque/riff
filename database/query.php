@@ -22,7 +22,9 @@
  * @since       0.1.1
  */
 
-class RiffQuery
+namespace Riff\Database;
+
+class Query
 {
     /**
      * The GROUP BY clause, if any
