@@ -1,22 +1,12 @@
 <?php
 
 /**
- * Riff PHP Library
+ * Easy file handling
  *
  * This source file is part of Riff, a stand-alone PHP library.
  *
  * @package     Riff
- * @subpackage  RiffFile
- *
- * @author      Pieter Beulque <pieterbeulque@gmail.com>
- * @since       0.2.1
- */
-
-/**
- * Allows for easy file handling
- *
- * @package     Riff
- * @subpackage  RiffFile
+ * @subpackage  File
  *
  * @author      Pieter Beulque <pieterbeulque@gmail.com>
  * @since       0.2.1

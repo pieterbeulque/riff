@@ -1,22 +1,12 @@
 <?php
 
 /**
- * Riff PHP Library
+ * Static filter methods
  *
  * This source file is part of Riff, a stand-alone PHP library.
  *
  * @package     Riff
- * @subpackage  RiffFilter
- *
- * @author      Pieter Beulque <pieterbeulque@gmail.com>
- * @since       0.1.1
- */
-
-/**
- * Static filter methods
- *
- * @package     Riff
- * @subpackage  RiffFilter
+ * @subpackage  Filter
  *
  * @author      Pieter Beulque <pieterbeulque@gmail.com>
  * @since       0.1.1

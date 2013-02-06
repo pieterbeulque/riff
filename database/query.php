@@ -1,22 +1,12 @@
 <?php
 
 /**
- * Riff PHP Library
+ * The query object, an OOP alternative to written SQL statements
  *
  * This source file is part of Riff, a stand-alone PHP library.
  *
  * @package     Riff
- * @subpackage  RiffDatabase
- *
- * @author      Pieter Beulque <pieterbeulque@gmail.com>
- * @since       0.1.1
- */
-
-/**
- * The query object, an OOP alternative to written SQL statements
- *
- * @package     Riff
- * @subpackage  RiffDatabase
+ * @subpackage  Database
  *
  * @author      Pieter Beulque <pieterbeulque@gmail.com>
  * @since       0.1.1

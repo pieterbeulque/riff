@@ -1,25 +1,15 @@
 <?php
 
 /**
- * Riff PHP Library
+ * Static cookie methods
  *
  * This source file is part of Riff, a stand-alone PHP library.
  *
  * @package     Riff
- * @subpackage  RiffCookie
+ * @subpackage  Cookie
  *
  * @author      Pieter Beulque <pieterbeulque@gmail.com>
  * @since       0.1.1
- */
-
-/**
- * Static cookie methods
- *
- * @package     Riff
- * @subpackage  RiffCookie
- *
- * @author      Pieter Beulque <pieterbeulque@gmail.com>
- * @since       0.1.2
  */
 
 namespace Riff\Cookie;

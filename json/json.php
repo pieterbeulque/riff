@@ -1,22 +1,12 @@
 <?php
 
 /**
- * Riff PHP Library
+ * Easy API handling with JSON
  *
  * This source file is part of Riff, a stand-alone PHP library.
  *
  * @package     Riff
- * @subpackage  RiffJSON
- *
- * @author      Pieter Beulque <pieterbeulque@gmail.com>
- * @since       0.1.1
- */
-
-/**
- * Allows for easy API calling via JSON in PHP
- *
- * @package     Riff
- * @subpackage  RiffJSON
+ * @subpackage  JSON
  *
  * @author      Pieter Beulque <pieterbeulque@gmail.com>
  * @since       0.1.1

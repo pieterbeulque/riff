@@ -1,28 +1,17 @@
 <?php
 
 /**
- * Riff PHP Library
+ * The base class for Riff that handles autoloading and generic functions
  *
  * This source file is part of Riff, a stand-alone PHP library.
  *
  * @package     Riff
- * @subpackage  Riff
  *
  * @author      Pieter Beulque <pieterbeulque@gmail.com>
  * @since       0.1.1
- *
  */
 
-/**
- * The base class for Riff that handles autoloading and generic functions
- *
- * @package     Riff
- * @subpackage  Riff
- *
- * @author      Pieter Beulque <pieterbeulque@gmail.com>
- * @since       0.1.1
- *
- */
+namespace Riff;
 
 // Used charset
 if (!defined('RIFF_CHARSET')) define('RIFF_CHARSET', 'utf-8');
@@ -31,7 +20,7 @@ if (!defined('RIFF_CHARSET')) define('RIFF_CHARSET', 'utf-8');
 if (!defined('RIFF_DEBUG')) define('RIFF_DEBUG', true);
 
 // Add the autoloader handle
-spl_autoload_register(array('Riff', 'autoload'));
+spl_autoload_register(array('Riff\Riff', 'autoload'));
 
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'exception' . DIRECTORY_SEPARATOR . 'exception.php';
 
@@ -39,7 +28,8 @@ class Riff
 {
     public function __construct()
     {
-
+        throw new Exception("Riff should not be instantiated");
+        die;
     }
 
     public static function autoload($class)
@@ -83,6 +73,6 @@ class Riff
 
         echo $dump;
 
-        if ($die) die();
+        if ($die) die;
     }
 }

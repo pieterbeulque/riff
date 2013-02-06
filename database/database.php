@@ -1,22 +1,12 @@
 <?php
 
 /**
- * Riff PHP Library
+ * A PDO wrapper class with some added functionality
  *
  * This source file is part of Riff, a stand-alone PHP library.
  *
  * @package     Riff
- * @subpackage  RiffDatabase
- *
- * @author      Pieter Beulque <pieterbeulque@gmail.com>
- * @since       0.1.1
- */
-
-/**
- * The database used by Riff to avoid writing SQL queries
- *
- * @package     Riff
- * @subpackage  RiffDatabase
+ * @subpackage  Database
  *
  * @author      Pieter Beulque <pieterbeulque@gmail.com>
  * @since       0.1.1

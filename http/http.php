@@ -1,22 +1,12 @@
 <?php
 
 /**
- * Riff PHP Library
+ * Easy HTTP header setting
  *
  * This source file is part of Riff, a stand-alone PHP library.
  *
  * @package     Riff
- * @subpackage  RiffHTTP
- *
- * @author      Pieter Beulque <pieterbeulque@gmail.com>
- * @since       0.2.1
- */
-
-/**
- * Allows for easy HTTP header setting
- *
- * @package     Riff
- * @subpackage  RiffHTTP
+ * @subpackage  HTTP
  *
  * @author      Pieter Beulque <pieterbeulque@gmail.com>
  * @since       0.2.1
